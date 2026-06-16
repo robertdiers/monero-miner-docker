@@ -1,0 +1,1 @@
+*/5 * * * * python3 /home/robert/xmrig_monitor.py > /home/robert/xmrig_monitor.log
