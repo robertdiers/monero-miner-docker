@@ -13,15 +13,6 @@ if [ ! -f "$HOME/moneroocean/miner.sh" ]; then
     curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.sh | bash -s "$WALLET_ADDRESS"
 fi
 
-# stop miner if installer started it, so tweaks apply cleanly before restart
-for i in $(seq 10); do
-  if pgrep xmrig > /dev/null 2>&1; then
-    pkill xmrig 2>/dev/null || true
-    break
-  fi
-  sleep 0.5
-done
-
 # deactivate auto-start in .profile
 sed -i 's|/root/moneroocean/miner.sh|#/root/moneroocean/miner.sh|g' "$HOME/.profile"
 
@@ -30,6 +21,10 @@ sed -i 's|"max-threads-hint": [0-9]*,|"max-threads-hint": '"$MAX_THREADS_HINT"',
 
 # msr tweak
 ./randomx_boost.sh
+
+# give miner time to start from installer, then stop it so restart picks up tweaks
+sleep 5
+pkill xmrig 2>/dev/null || true
 
 # start mining
 "$HOME/moneroocean/miner.sh" &
