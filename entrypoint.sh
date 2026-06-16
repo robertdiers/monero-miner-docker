@@ -13,21 +13,14 @@ if [ ! -f "$HOME/moneroocean/miner.sh" ]; then
     curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.sh | bash -s "$WALLET_ADDRESS"
 fi
 
-# deactivate auto-start in .profile
+echo "Deactivating miner auto-start in .profile..."
 sed -i 's|/root/moneroocean/miner.sh|#/root/moneroocean/miner.sh|g' "$HOME/.profile"
 
-# set max threads hint
+echo "Setting max threads hint to $MAX_THREADS_HINT..."
 sed -i 's|"max-threads-hint": [0-9]*,|"max-threads-hint": '"$MAX_THREADS_HINT"',|g' "$HOME/moneroocean/config.json"
 
-# msr tweak
+echo "Running randomx_boost..."
 ./randomx_boost.sh
 
-# give miner time to start from installer, then stop it so restart picks up tweaks
-sleep 5
-pkill xmrig 2>/dev/null || true
-
-# start mining
-"$HOME/moneroocean/miner.sh" &
-
-# start cron for metrics
+echo "Starting cron for metrics..."
 cron -f
