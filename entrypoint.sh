@@ -14,7 +14,13 @@ if [ ! -f "$HOME/moneroocean/miner.sh" ]; then
 fi
 
 # stop miner if installer started it, so tweaks apply cleanly before restart
-pkill xmrig 2>/dev/null || true
+for i in $(seq 10); do
+  if pgrep xmrig > /dev/null 2>&1; then
+    pkill xmrig 2>/dev/null || true
+    break
+  fi
+  sleep 0.5
+done
 
 # deactivate auto-start in .profile
 sed -i 's|/root/moneroocean/miner.sh|#/root/moneroocean/miner.sh|g' "$HOME/.profile"
