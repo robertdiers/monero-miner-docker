@@ -13,6 +13,9 @@ if [ ! -f "$HOME/moneroocean/miner.sh" ]; then
     curl -s -L https://raw.githubusercontent.com/MoneroOcean/xmrig_setup/master/setup_moneroocean_miner.sh | bash -s "$WALLET_ADDRESS"
 fi
 
+# stop miner if installer started it, so tweaks apply cleanly before restart
+pkill xmrig 2>/dev/null || true
+
 # deactivate auto-start in .profile
 sed -i 's|/root/moneroocean/miner.sh|#/root/moneroocean/miner.sh|g' "$HOME/.profile"
 
