@@ -1,6 +1,6 @@
 FROM docker.io/ubuntu:24.04
 
-RUN apt update && apt install -y curl bash cron python3 python3-psycopg2 python3-psutil software-properties-common kmod msr-tools linux-headers-$(uname -r)
+RUN apt update && apt install -y curl bash cron python3 python3-psycopg2 python3-psutil software-properties-common kmod msr-tools linux-headers-$(uname -r) psmisc procps
 
 RUN useradd -m robert
 RUN echo "robert:123" | chpasswd
